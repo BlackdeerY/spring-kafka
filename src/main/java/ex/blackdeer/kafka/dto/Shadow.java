@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+//public class Shadow extends KafkaDTO {
 public class Shadow {
 
     private static final Logger logger = LoggerFactory.getLogger(Shadow.class);

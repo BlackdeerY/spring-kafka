@@ -7,6 +7,8 @@ import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.kafka.annotation.KafkaHandler;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +20,22 @@ public class CommandListner {
     private final TaskExecutor taskExecutor = new SimpleAsyncTaskExecutor();
 
     @KafkaHandler
-    public void command(CommandRequest commandRequest) {
-        logger.info(String.format("Kafka consume: [%stopic: %s,%smessage: %s%s]", System.lineSeparator(), "command", System.lineSeparator(), commandRequest.toJSONObject().toString(4), System.lineSeparator()));
+    public void command(CommandRequest commandRequest,
+                        @Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+                        @Header(KafkaHeaders.RECEIVED_KEY) String key,
+                        @Header(KafkaHeaders.RECEIVED_PARTITION) String partitionId,
+                        @Header(KafkaHeaders.RECEIVED_TIMESTAMP) String timestamp) {
+        logger.info(String.format("Kafka consume: [%stopic: %s,%skey: %s,%spartitionId: %s,%stimestamp: %s,%smessage: %s%s]",
+                System.lineSeparator(),
+                topic,
+                System.lineSeparator(),
+                key,
+                System.lineSeparator(),
+                partitionId,
+                System.lineSeparator(),
+                timestamp,
+                System.lineSeparator(),
+                commandRequest.toJSONObject().toString(4),
+                System.lineSeparator()));
     }
 }
