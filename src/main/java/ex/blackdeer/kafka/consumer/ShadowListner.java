@@ -13,7 +13,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 @Component
-@KafkaListener(id = "shadowListner", topics = {"shadow"})
+@KafkaListener(clientIdPrefix = "shadowListner", topics = {"shadow"}, concurrency = "7", groupId = "spring-kafka")
 public class ShadowListner {
 
     private final Logger logger = LoggerFactory.getLogger(ShadowListner.class);
